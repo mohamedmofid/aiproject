@@ -1,0 +1,61 @@
+/* Basic Styling for the Page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Centered container */
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+}
+
+/* Heading */
+h1 {
+    color: #4CAF50;
+}
+
+/* Input and Button Styling */
+input[type="text"] {
+    padding: 10px;
+    margin-top: 20px;
+    width: 80%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Result Styling */
+#result-container {
+    margin-top: 30px;
+    font-size: 18px;
+}
+
+#result-container h3 {
+    font-size: 24px;
+    color: #4CAF50;
+}

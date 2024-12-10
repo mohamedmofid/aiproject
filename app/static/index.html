@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mushroom Edibility Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            width: 60%;
+        }
+        .question-container select {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .question-container button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .question-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Mushroom Edibility Prediction</h1>
+    <div id="question-container" class="question-container"></div>
+
+    <script>
+        const questions = [
+            {
+                id: 'gill_color',
+                label: 'What is the gill color?',
+                options: [
+                    { value: 'k', label: 'Black' },
+                    { value: 'n', label: 'Brown' },
+                    { value: 'b', label: 'Buff' },
+                    { value: 'h', label: 'Chocolate' },
+                    { value: 'g', label: 'Gray' },
+                    { value: 'r', label: 'Green' },
+                    { value: 'o', label: 'Orange' },
+                    { value: 'p', label: 'Pink' },
+                    { value: 'u', label: 'Purple' },
+                    { value: 'e', label: 'Red' },
+                    { value: 'w', label: 'White' },
+                    { value: 'y', label: 'Yellow' }
+                ]
+            },
+            {
+                id: 'spore_print_color',
+                label: 'What is the spore print color?',
+                options: [
+                    { value: 'k', label: 'Black' },
+                    { value: 'n', label: 'Brown' },
+                    { value: 'b', label: 'Buff' },
+                    { value: 'h', label: 'Chocolate' },
+                    { value: 'r', label: 'Green' },
+                    { value: 'o', label: 'Orange' },
+                    { value: 'u', label: 'Purple' },
+                    { value: 'w', label: 'White' },
+                    { value: 'y', label: 'Yellow' }
+                ]
+            },
+            {
+                id: 'mushroom_population',
+                label: 'What is the population of the mushroom?',
+                options: [
+                    { value: 'a', label: 'Abundant' },
+                    { value: 'c', label: 'Clustered' },
+                    { value: 'n', label: 'Numerous' },
+                    { value: 's', label: 'Scattered' },
+                    { value: 'v', label: 'Several' },
+                    { value: 'y', label: 'Solitary' }
+                ]
+            },
+            {
+                id: 'gill_size',
+                label: 'What is the gill size?',
+                options: [
+                    { value: 'b', label: 'Broad' },
+                    { value: 'n', label: 'Narrow' }
+                ]
+            },
+            {
+                id: 'mushroom_odor',
+                label: 'What is the mushroom odor?',
+                options: [
+                    { value: 'a', label: 'Almond' },
+                    { value: 'l', label: 'Anise' },
+                    { value: 'c', label: 'Creosote' },
+                    { value: 'y', label: 'Fishy' },
+                    { value: 'f', label: 'Foul' },
+                    { value: 'm', label: 'Musty' },
+                    { value: 'n', label: 'None' },
+                    { value: 'p', label: 'Pungent' },
+                    { value: 's', label: 'Spicy' }
+                ]
+            },
+            {
+                id: 'mushroom_habitat',
+                label: 'What is the mushroom habitat?',
+                options: [
+                    { value: 'g', label: 'Grasses' },
+                    { value: 'l', label: 'Leaves' },
+                    { value: 'm', label: 'Meadows' },
+                    { value: 'p', label: 'Paths' },
+                    { value: 'u', label: 'Urban' }
+                ]
+            },
+            {
+                id: 'bruising_present',
+                label: 'Is there bruising present?',
+                options: [
+                    { value: 't', label: 'Yes' },
+                    { value: 'f', label: 'No' }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        const userResponses = {};
+
+        function showNextQuestion() {
+            const questionContainer = document.getElementById('question-container');
+            const currentQuestion = questions[currentQuestionIndex];
+
+            if (!questionContainer) {
+                console.error("Question container not found.");
+                return;
+            }
+
+            questionContainer.innerHTML = '';
+
+            const questionLabel = document.createElement('div');
+            questionLabel.innerText = currentQuestion.label;
+            questionContainer.appendChild(questionLabel);
+
+            const selectElement = document.createElement('select');
+            selectElement.id = currentQuestion.id;
+
+            currentQuestion.options.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.value;
+                optionElement.innerText = option.label;
+                selectElement.appendChild(optionElement);
+            });
+
+            questionContainer.appendChild(selectElement);
+
+            const nextButton = document.createElement('button');
+            nextButton.innerText = 'Next';
+            nextButton.onclick = nextQuestion;
+            questionContainer.appendChild(nextButton);
+        }
+
+        async function nextQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            const selectedValue = document.querySelector(`#${currentQuestion.id}`).value;
+
+            if (!selectedValue) {
+                alert("Please select a value for " + currentQuestion.label);
+                return;
+            }
+
+            userResponses[currentQuestion.id] = selectedValue;
+
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                showNextQuestion();
+            } else {
+                await getPrediction(); // All questions answered, get prediction
+            }
+        }
+
+        async function getPrediction() {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userResponses)
+            });
+
+            const data = await response.json();
+            alert(`Prediction: ${data.prediction}\nConfidence: ${data.confidence}`);
+        }
+
+        window.onload = function() {
+            showNextQuestion(); // Start with the first question when the page loads
+        };
+    </script>
+
+</body>
+</html>
